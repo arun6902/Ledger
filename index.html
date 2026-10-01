@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Ledger">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f6f3ee">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#17140f">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIk15IExlZGdlciIsICJzaG9ydF9uYW1lIjogIkxlZGdlciIsICJzdGFydF91cmwiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjZjZmM2VlIiwgInRoZW1lX2NvbG9yIjogIiMyYzRhNjMiLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01DOXpkbWNpSUhacFpYZENiM2c5SWpBZ01DQXhPVElnTVRreUlqNDhjbVZqZENCM2FXUjBhRDBpTVRreUlpQm9aV2xuYUhROUlqRTVNaUlnY25nOUlqUXdJaUJtYVd4c1BTSWpNbU0wWVRZeklpOCtQSFJsZUhRZ2VEMGlPVFlpSUhrOUlqRXpNaUlnWm05dWRDMXphWHBsUFNJeE1EUWlJSFJsZUhRdFlXNWphRzl5UFNKdGFXUmtiR1VpSUdacGJHdzlJaU5tTm1ZelpXVWlJR1p2Ym5RdFptRnRhV3g1UFNKSFpXOXlaMmxoTEhObGNtbG1JajVTY3p3dmRHVjRkRDQ4TDNOMlp6ND0iLCAic2l6ZXMiOiAiMTkyeDE5MiIsICJ0eXBlIjogImltYWdlL3N2Zyt4bWwiLCAicHVycG9zZSI6ICJhbnkifV19">
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMmM0YTYzIi8+PHRleHQgeD0iOTYiIHk9IjEzMiIgZm9udC1zaXplPSIxMDQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmNmYzZWUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIj5SczwvdGV4dD48L3N2Zz4=">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIj48cmVjdCB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgcng9IjQwIiBmaWxsPSIjMmM0YTYzIi8+PHRleHQgeD0iOTYiIHk9IjEzMiIgZm9udC1zaXplPSIxMDQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiNmNmYzZWUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIj5SczwvdGV4dD48L3N2Zz4=">
+<title>My Ledger</title>
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f6f3ee; --card:#ffffff; --ink:#211d17; --muted:#7a7468; --line:#e5e0d6;
+  --in:#2f7a4f; --out:#b5502f; --amber:#9c6b1a; --accent:#2c4a63;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#17140f; --card:#221e17; --ink:#eee7d9; --muted:#a39a89; --line:#332d23;
+    --in:#5fbf87; --out:#e08662; --amber:#dba847; --accent:#8fb8d8;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17140f; --card:#221e17; --ink:#eee7d9; --muted:#a39a89; --line:#332d23;
+  --in:#5fbf87; --out:#e08662; --amber:#dba847; --accent:#8fb8d8;
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;min-height:100%;}
+[hidden]{display:none!important;}
+.wrap{max-width:480px;margin:0 auto;padding:16px 16px 150px;}
+header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+header.spread{justify-content:space-between;}
+h1{font-family:ui-serif,Georgia,serif;font-size:20px;margin:0;}
+.backbtn{background:none;border:none;color:var(--accent);font-size:24px;padding:0;line-height:1;}
+#currency{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:5px 6px;font-size:13px;}
+
+.bigbal-wrap{text-align:center;padding:14px 0 10px;}
+.bigbal-label{font-size:12.5px;color:var(--muted);letter-spacing:.02em;}
+.bigbal{font-family:ui-serif,Georgia,serif;font-size:42px;font-weight:600;line-height:1.15;word-break:break-all;}
+.bigbal.neg{color:var(--out);}
+.bigbal.pos{color:var(--in);}
+.subrow{display:flex;justify-content:center;gap:28px;margin-top:8px;}
+.subitem{display:flex;flex-direction:column;align-items:center;}
+.sublabel{font-size:11.5px;color:var(--muted);}
+.subval{font-family:ui-serif,Georgia,serif;font-size:17px;font-weight:600;cursor:pointer;border-bottom:1px dotted var(--muted);}
+
+.prcard-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+.prcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.prlabel{font-size:11.5px;color:var(--muted);margin-bottom:3px;}
+.prtotal{font-family:ui-serif,Georgia,serif;font-size:18px;margin-bottom:8px;}
+.prsplit{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);gap:6px;}
+.prsplit b{color:var(--ink);font-weight:600;}
+
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.stat.wide{grid-column:1/3;}
+.stat.tap{cursor:pointer;}
+.stat .label{font-size:12px;color:var(--muted);margin-bottom:4px;}
+.stat .value{font-family:ui-serif,Georgia,serif;font-size:19px;word-break:break-all;}
+.pos{color:var(--in);} .neg{color:var(--out);} .warn{color:var(--amber);}
+
+.sectiontitle{font-size:13px;color:var(--muted);margin:20px 2px 8px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;}
+.pagesub{font-size:12.5px;color:var(--muted);margin:-4px 0 4px;}
+.fab{position:fixed;right:20px;bottom:calc(74px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;background:var(--accent);color:#12222e;border:none;font-size:28px;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:10;}
+
+.typegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;}
+.typebtn,.acctbtn,.usebtn{padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font-size:14px;}
+.typebtn.sel{border-color:var(--accent);background:var(--accent);color:#12222e;font-weight:600;}
+.row2{display:flex;gap:8px;margin-bottom:10px;}
+.row2 > *{flex:1;min-width:0;}
+input{padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:14px;width:100%;}
+.acctrow,.userow{display:flex;gap:8px;margin-bottom:10px;}
+.acctbtn.sel{border-color:var(--accent);background:var(--accent);color:#12222e;font-weight:600;}
+.usebtn.sel-useful{border-color:var(--in);background:var(--in);color:#fff;font-weight:600;}
+.usebtn.sel-wasteful{border-color:var(--out);background:var(--out);color:#fff;font-weight:600;}
+.submitbtn{width:100%;padding:12px;border:none;border-radius:10px;background:var(--ink);color:var(--bg);font-weight:600;font-size:14.5px;margin-top:4px;}
+
+.list{display:flex;flex-direction:column;gap:8px;}
+.item{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;gap:8px;box-shadow:0 1px 2px rgba(0,0,0,.03);}
+.item .meta{min-width:0;}
+.item .note{font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.item .sub{font-size:11.5px;color:var(--muted);margin-top:1px;}
+.item .right{text-align:right;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:5px;}
+.item .amt{font-family:ui-serif,Georgia,serif;font-size:15px;}
+.rowbtns{display:flex;gap:2px;}
+.tag{display:inline-block;font-size:10px;padding:1px 6px;border-radius:6px;margin-top:4px;color:#fff;}
+.tag.pending{background:var(--amber);}
+.tag.settled{background:var(--muted);}
+.tag.wasteful{background:var(--out);}
+.smallbtn{border:none;background:none;color:var(--muted);font-size:15px;padding:2px 4px;}
+.settlebtn{border:1px solid var(--amber);color:var(--amber);background:none;border-radius:8px;font-size:10.5px;padding:3px 7px;margin-top:4px;display:inline-block;white-space:nowrap;}
+.empty{text-align:center;color:var(--muted);padding:30px 0;font-size:14px;}
+
+.plist{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:0 1px 2px rgba(0,0,0,.04);}
+.pcard-head{display:flex;justify-content:space-between;align-items:center;font-weight:600;gap:8px;}
+.pname{font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ptotal{font-family:ui-serif,Georgia,serif;font-size:16px;flex-shrink:0;}
+.psub{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--muted);margin-top:7px;padding-top:7px;border-top:1px dashed var(--line);gap:8px;}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:20;}
+nav button{flex:1;padding:13px 4px;border:none;background:none;color:var(--muted);font-size:13px;}
+nav button.on{color:var(--accent);font-weight:700;}
+</style>
+</head>
+<body>
+
+<div id="dashboardView">
+  <div class="wrap">
+    <header class="spread">
+      <h1>My Ledger</h1>
+      <select id="currency"></select>
+    </header>
+
+    <div class="bigbal-wrap">
+      <div class="bigbal-label">TOTAL BALANCE</div>
+      <div class="bigbal" id="bigBalance">0.00</div>
+      <div class="subrow">
+        <div class="subitem"><span class="sublabel">Bank</span><span class="subval" id="bankBal" onclick="editOpening('bank')">0.00</span></div>
+        <div class="subitem"><span class="sublabel">Cash</span><span class="subval" id="cashBal" onclick="editOpening('cash')">0.00</span></div>
+      </div>
+    </div>
+
+    <div class="prcard-row">
+      <div class="prcard">
+        <div class="prlabel">Total Payment</div>
+        <div class="prtotal neg" id="payTotal">0.00</div>
+        <div class="prsplit"><span>Bank <b id="payBank">0.00</b></span><span>Cash <b id="payCash">0.00</b></span></div>
+      </div>
+      <div class="prcard">
+        <div class="prlabel">Total Receipt</div>
+        <div class="prtotal pos" id="recTotal">0.00</div>
+        <div class="prsplit"><span>Bank <b id="recBank">0.00</b></span><span>Cash <b id="recCash">0.00</b></span></div>
+      </div>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <h2 class="sectiontitle">Transactions</h2>
+    <div class="list" id="list"></div>
+  </div>
+</div>
+
+<div id="addView" hidden>
+  <div class="wrap">
+    <header>
+      <button class="backbtn" id="closeAdd" aria-label="Back">←</button>
+      <h1 id="addTitle">Add Transaction</h1>
+    </header>
+    <div class="typegrid" id="typegrid"></div>
+    <div class="row2">
+      <input id="amount" type="number" inputmode="decimal" placeholder="Amount" min="0" step="0.01">
+      <input id="date" type="date">
+    </div>
+    <div class="acctrow" id="acctrow"></div>
+    <div class="userow" id="userow"></div>
+    <div class="row2" id="personRow"><input id="person" type="text" placeholder="Person name"></div>
+    <div class="row2"><input id="note" type="text" placeholder="Note (optional)"></div>
+    <button class="submitbtn" id="submitTx">Save</button>
+  </div>
+</div>
+
+<div id="debtorsView" hidden>
+  <div class="wrap">
+    <header>
+      <button class="backbtn" data-back aria-label="Back">←</button>
+      <h1>Debtors</h1>
+    </header>
+    <div class="pagesub">People who owe you money</div>
+    <div class="bigbal-wrap" style="padding-top:2px;">
+      <div class="bigbal-label">TOTAL TO RECEIVE</div>
+      <div class="bigbal pos" id="debtorsTotal" style="font-size:32px;">0.00</div>
+    </div>
+    <div id="debtorsList" class="plist"></div>
+  </div>
+</div>
+
+<div id="creditorsView" hidden>
+  <div class="wrap">
+    <header>
+      <button class="backbtn" data-back aria-label="Back">←</button>
+      <h1>Creditors</h1>
+    </header>
+    <div class="pagesub">People you owe money to</div>
+    <div class="bigbal-wrap" style="padding-top:2px;">
+      <div class="bigbal-label">TOTAL TO GIVE</div>
+      <div class="bigbal neg" id="creditorsTotal" style="font-size:32px;">0.00</div>
+    </div>
+    <div id="creditorsList" class="plist"></div>
+  </div>
+</div>
+
+<button class="fab" id="openAdd" aria-label="Add transaction">+</button>
+<nav id="nav">
+  <button class="on" data-go="dashboard">🏠 Home</button>
+  <button data-go="debtors">📥 Debtors</button>
+  <button data-go="creditors">📤 Creditors</button>
+</nav>
+
+<script>
+let claudeDb=null, mode='local', monthDocs={}, localItems=[];
+let currency = localStorage.getItem('cur') || '₹';
+let selType='expense', selAcct='cash', selUse='useful';
+let editingId=null, editingOriginal=null, curPage='dashboard';
+let opening={cash:0,bank:0};
+
+const TYPES=[
+  {k:'expense',label:'💸 Expense'},
+  {k:'lend',label:'🤝 Lent'},
+  {k:'income',label:'💰 Income'},
+  {k:'borrow',label:'🙏 Borrowed'}
+];
+const TYPE_LABEL={expense:'Expense',lend:'Lent',income:'Income',borrow:'Borrowed'};
+
+function fmt(n){
+  const s=Math.abs(n).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+  return (n<0?'-':'')+currency+s;
+}
+function escapeHtml(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function newId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+function allItems(){return mode==='db'?Object.values(monthDocs).flat():localItems;}
+
+function computeStats(items){
+  let cash=opening.cash||0,bank=opening.bank||0,payCash=0,payBank=0,recCash=0,recBank=0,receive=0,give=0,wasted=0;
+  items.forEach(t=>{
+    let d=0;
+    if(t.type==='income'||t.type==='borrow'){
+      d=t.amount;
+      if(t.account==='cash')recCash+=t.amount; else recBank+=t.amount;
+    }else if(t.type==='expense'||t.type==='lend'){
+      d=-t.amount;
+      if(t.account==='cash')payCash+=t.amount; else payBank+=t.amount;
+    }
+    if(t.account==='cash')cash+=d; else bank+=d;
+    if((t.type==='lend'||t.type==='borrow')&&t.settled){
+      const r=t.type==='lend'?t.amount:-t.amount;
+      const sa=t.settleAccount||t.account;
+      if(sa==='cash')cash+=r; else bank+=r;
+    }
+    if(t.type==='lend'&&!t.settled)receive+=t.amount;
+    if(t.type==='borrow'&&!t.settled)give+=t.amount;
+    if(t.type==='expense'&&t.usefulness==='wasteful')wasted+=t.amount;
+  });
+  return {cash,bank,total:cash+bank,payCash,payBank,payTotal:payCash+payBank,recCash,recBank,recTotal:recCash+recBank,receive,give,wasted};
+}
+
+function computePeopleMap(items,type){
+  const map={};
+  items.filter(t=>t.type===type).forEach(t=>{
+    const name=(t.person||t.note||'').trim()||'Unnamed',key=name.toLowerCase();
+    if(!map[key])map[key]={name,total:0,entries:[]};
+    map[key].entries.push(t);
+    if(!t.settled)map[key].total+=t.amount;
+  });
+  return Object.values(map).filter(p=>p.total>0).sort((a,b)=>b.total-a.total);
+}
+
+function renderPeoplePage(items,type,totalElId,listElId,verb){
+  const people=computePeopleMap(items,type);
+  const total=people.reduce((s,p)=>s+p.total,0);
+  document.getElementById(totalElId).textContent=fmt(total);
+  const wrap=document.getElementById(listElId);
+  if(!people.length){wrap.innerHTML=`<div class="empty">Nothing pending here.</div>`;return;}
+  wrap.innerHTML=people.map(p=>`
+    <div class="pcard">
+      <div class="pcard-head"><span class="pname">${escapeHtml(p.name)}</span><span class="ptotal ${type==='lend'?'pos':'neg'}">${fmt(p.total)}</span></div>
+      ${p.entries.filter(e=>!e.settled).map(e=>`
+        <div class="psub">
+          <span>${e.date} · ${e.account==='cash'?'Cash':'Bank'} · ${fmt(e.amount)}${e.person&&e.note?' · '+escapeHtml(e.note):''}</span>
+          <span class="rowbtns"><button class="smallbtn" data-act="edit" data-id="${e.id}">✎</button><button class="settlebtn" data-act="settle" data-id="${e.id}">${verb}</button></span>
+        </div>`).join('')}
+    </div>`).join('');
+}
+
+function render(){
+  const items=allItems().slice().sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));
+  const s=computeStats(items);
+  const big=document.getElementById('bigBalance');
+  big.textContent=fmt(s.total);
+  big.className='bigbal'+(s.total<0?' neg':'');
+  document.getElementById('bankBal').textContent=fmt(s.bank);
+  document.getElementById('cashBal').textContent=fmt(s.cash);
+  document.getElementById('payTotal').textContent=fmt(s.payTotal);
+  document.getElementById('payBank').textContent=fmt(s.payBank);
+  document.getElementById('payCash').textContent=fmt(s.payCash);
+  document.getElementById('recTotal').textContent=fmt(s.recTotal);
+  document.getElementById('recBank').textContent=fmt(s.recBank);
+  document.getElementById('recCash').textContent=fmt(s.recCash);
+  document.getElementById('stats').innerHTML=`
+    <div class="stat tap" data-page="debtors"><div class="label">To receive ›</div><div class="value ${s.receive>0?'pos':''}">${fmt(s.receive)}</div></div>
+    <div class="stat tap" data-page="creditors"><div class="label">To give ›</div><div class="value ${s.give>0?'neg':''}">${fmt(s.give)}</div></div>
+    <div class="stat wide"><div class="label">Wasted spending</div><div class="value warn">${fmt(s.wasted)}</div></div>`;
+  const list=document.getElementById('list');
+  if(!items.length){list.innerHTML='<div class="empty">No transactions yet. Tap + to add one.</div>';}
+  else{
+    list.innerHTML=items.map(t=>{
+      const inflow=t.type==='income'||t.type==='borrow';
+      let tag='';
+      if(t.type==='lend'||t.type==='borrow'){
+        tag=t.settled?'<span class="tag settled">Settled</span>':`<span class="tag pending">${t.type==='lend'?'To receive':'To give'}</span>`;
+      }else if(t.type==='expense'&&t.usefulness==='wasteful'){
+        tag='<span class="tag wasteful">Wasted</span>';
+      }
+      const settleBtn=(t.type==='lend'||t.type==='borrow')&&!t.settled?
+        `<button class="settlebtn" data-act="settle" data-id="${t.id}">${t.type==='lend'?'Mark received':'Mark paid'}</button>`:'';
+      return `<div class="item">
+        <div class="meta">
+          <div class="note">${escapeHtml(t.person?(t.type==='lend'?'Lent to ':'Borrowed from ')+t.person:(t.note||TYPE_LABEL[t.type]))}</div>
+          <div class="sub">${t.date} · ${t.account==='cash'?'Cash':'Bank'} · ${TYPE_LABEL[t.type]}${t.person&&t.note?' · '+escapeHtml(t.note):''}</div>
+          ${tag}${settleBtn}
+        </div>
+        <div class="right">
+          <div class="amt ${inflow?'pos':'neg'}">${inflow?'+':'-'}${fmt(t.amount)}</div>
+          <div class="rowbtns">
+            <button class="smallbtn" data-act="edit" data-id="${t.id}">✎</button>
+            <button class="smallbtn" data-act="del" data-id="${t.id}">✕</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  renderPeoplePage(items,'lend','debtorsTotal','debtorsList','Mark received');
+  renderPeoplePage(items,'borrow','creditorsTotal','creditorsList','Mark paid');
+}
+
+async function saveOpening(){
+  if(mode==='db'){await claudeDb.doc('ledger/settings').set({cash:opening.cash||0,bank:opening.bank||0});}
+  else{try{localStorage.setItem('opening',JSON.stringify(opening));}catch(e){}render();}
+}
+function editOpening(which){
+  const val=prompt('Opening '+(which==='cash'?'cash':'bank')+' balance (what you already had before using this app):',opening[which]||0);
+  if(val===null)return;
+  const num=parseFloat(val);
+  if(isNaN(num)){alert('Enter a number');return;}
+  opening[which]=num;
+  saveOpening();
+}
+function settleItem(id){
+  const t=allItems().find(i=>i.id===id);
+  if(!t)return;
+  const verb=t.type==='lend'?'received':'paid';
+  const ans=prompt('Which account was it '+verb+' into? Type cash or bank.',t.account);
+  if(ans===null)return;
+  const norm=(ans||'').trim().toLowerCase();
+  const settleAccount=(norm==='cash'||norm==='bank')?norm:t.account;
+  updateItem(id,{settled:true,settleAccount});
+}
+function findMonthKey(id){for(const mk in monthDocs){if(monthDocs[mk].some(i=>i.id===id))return mk;}return null;}
+function saveLocal(){try{localStorage.setItem('ledger_items',JSON.stringify(localItems));}catch(e){}}
+
+async function addTransaction(tx){
+  if(mode==='db'){
+    const mk=tx.date.slice(0,7);
+    const cur=monthDocs[mk]||[];
+    await claudeDb.doc('ledger/'+mk).set({items:[...cur,tx]});
+  }else{localItems.push(tx);saveLocal();render();}
+}
+async function updateItem(id,patch){
+  if(mode==='db'){
+    const mk=findMonthKey(id); if(!mk)return;
+    const updated=monthDocs[mk].map(i=>i.id===id?{...i,...patch}:i);
+    await claudeDb.doc('ledger/'+mk).set({items:updated});
+  }else{localItems=localItems.map(i=>i.id===id?{...i,...patch}:i);saveLocal();render();}
+}
+async function editTransaction(id,updatedTx){
+  if(mode==='db'){
+    const oldMk=findMonthKey(id);
+    const newMk=updatedTx.date.slice(0,7);
+    if(oldMk===newMk){
+      const updated=(monthDocs[oldMk]||[]).map(i=>i.id===id?updatedTx:i);
+      await claudeDb.doc('ledger/'+oldMk).set({items:updated});
+    }else{
+      if(oldMk){
+        const oldUpdated=(monthDocs[oldMk]||[]).filter(i=>i.id!==id);
+        await claudeDb.doc('ledger/'+oldMk).set({items:oldUpdated});
+      }
+      const newCur=monthDocs[newMk]||[];
+      await claudeDb.doc('ledger/'+newMk).set({items:[...newCur,updatedTx]});
+    }
+  }else{
+    localItems=localItems.map(i=>i.id===id?updatedTx:i);
+    saveLocal();render();
+  }
+}
+async function deleteItem(id){
+  if(mode==='db'){
+    const mk=findMonthKey(id); if(!mk)return;
+    const updated=monthDocs[mk].filter(i=>i.id!==id);
+    await claudeDb.doc('ledger/'+mk).set({items:updated});
+  }else{localItems=localItems.filter(i=>i.id!==id);saveLocal();render();}
+}
+
+function buildForm(){
+  document.getElementById('typegrid').innerHTML=TYPES.map(t=>`<button type="button" class="typebtn ${t.k===selType?'sel':''}" data-type="${t.k}">${t.label}</button>`).join('');
+  document.getElementById('acctrow').innerHTML=['cash','bank'].map(a=>`<button type="button" class="acctbtn ${a===selAcct?'sel':''}" data-acct="${a}">${a==='cash'?'Cash':'Bank'}</button>`).join('');
+  document.getElementById('userow').innerHTML=['useful','wasteful'].map(u=>`<button type="button" class="usebtn ${u===selUse?'sel-'+u:''}" data-use="${u}">${u==='useful'?'Useful':'Wasteful'}</button>`).join('');
+  document.getElementById('userow').style.display=selType==='expense'?'flex':'none';
+  const loan=selType==='lend'||selType==='borrow';
+  document.getElementById('personRow').style.display=loan?'flex':'none';
+  document.getElementById('person').placeholder=selType==='lend'?'Lent to (person name)':'Borrowed from (person name)';
+}
+
+const dashboardView=document.getElementById('dashboardView');
+const addView=document.getElementById('addView');
+const debtorsView=document.getElementById('debtorsView');
+const creditorsView=document.getElementById('creditorsView');
+const VIEWS={dashboard:dashboardView,add:addView,debtors:debtorsView,creditors:creditorsView};
+function showPage(name){
+  Object.keys(VIEWS).forEach(k=>{VIEWS[k].hidden=(k!==name);});
+  const main=name!=='add';
+  document.getElementById('nav').hidden=!main;
+  document.getElementById('openAdd').hidden=!main;
+  if(main){curPage=name;document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.go===name));}
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('#nav button').forEach(b=>{b.onclick=()=>showPage(b.dataset.go);});
+document.querySelectorAll('[data-back]').forEach(b=>{b.onclick=()=>showPage('dashboard');});
+document.getElementById('stats').addEventListener('click',e=>{
+  const el=e.target.closest('[data-page]'); if(!el)return;
+  showPage(el.dataset.page);
+});
+
+document.getElementById('openAdd').onclick=()=>{
+  editingId=null; editingOriginal=null;
+  selType=curPage==='debtors'?'lend':curPage==='creditors'?'borrow':'expense'; selAcct='cash'; selUse='useful';
+  buildForm();
+  document.getElementById('amount').value='';
+  document.getElementById('date').value=new Date().toISOString().slice(0,10);
+  document.getElementById('note').value='';
+  document.getElementById('person').value='';
+  document.getElementById('addTitle').textContent='Add Transaction';
+  document.getElementById('submitTx').textContent='Save';
+  showPage('add');
+};
+document.getElementById('closeAdd').onclick=()=>{editingId=null;editingOriginal=null;showPage(curPage);};
+
+function openEdit(id){
+  const t=allItems().find(i=>i.id===id);
+  if(!t)return;
+  editingId=t.id; editingOriginal={...t};
+  selType=t.type; selAcct=t.account; selUse=t.usefulness||'useful';
+  buildForm();
+  document.getElementById('amount').value=t.amount;
+  document.getElementById('date').value=t.date;
+  const legacy=(t.type==='lend'||t.type==='borrow')&&t.person===undefined;
+  document.getElementById('person').value=legacy?(t.note||''):(t.person||'');
+  document.getElementById('note').value=legacy?'':(t.note||'');
+  document.getElementById('addTitle').textContent='Edit Transaction';
+  document.getElementById('submitTx').textContent='Save changes';
+  showPage('add');
+}
+
+document.getElementById('typegrid').onclick=e=>{const b=e.target.closest('.typebtn');if(!b)return;selType=b.dataset.type;buildForm();};
+document.getElementById('acctrow').onclick=e=>{const b=e.target.closest('.acctbtn');if(!b)return;selAcct=b.dataset.acct;buildForm();};
+document.getElementById('userow').onclick=e=>{const b=e.target.closest('.usebtn');if(!b)return;selUse=b.dataset.use;buildForm();};
+
+document.getElementById('submitTx').onclick=async()=>{
+  const amtEl=document.getElementById('amount');
+  const amount=parseFloat(amtEl.value);
+  if(!amount||amount<=0){alert('Enter a valid amount');return;}
+  const date=document.getElementById('date').value||new Date().toISOString().slice(0,10);
+  const note=document.getElementById('note').value.trim();
+  const loan=selType==='lend'||selType==='borrow';
+  const person=document.getElementById('person').value.trim();
+  if(loan&&!person){alert("Please enter the person's name");return;}
+  const tx={id:editingId||newId(),type:selType,amount,account:selAcct,date,note};
+  if(selType==='expense')tx.usefulness=selUse;
+  if(loan){
+    tx.person=person;
+    tx.settled=!!(editingOriginal&&editingOriginal.type===selType&&editingOriginal.settled);
+    if(tx.settled&&editingOriginal.settleAccount)tx.settleAccount=editingOriginal.settleAccount;
+  }
+  const btn=document.getElementById('submitTx');
+  btn.disabled=true;btn.textContent='Saving...';
+  try{
+    if(editingId)await editTransaction(editingId,tx);
+    else await addTransaction(tx);
+  }catch(e){alert('Could not save, please try again.');}
+  btn.disabled=false;
+  editingId=null; editingOriginal=null;
+  amtEl.value='';document.getElementById('note').value='';
+  showPage(curPage);
+};
+
+document.getElementById('list').onclick=e=>{
+  const b=e.target.closest('button');if(!b)return;
+  const id=b.dataset.id;
+  if(b.dataset.act==='del'){if(confirm('Delete this transaction?'))deleteItem(id);}
+  if(b.dataset.act==='settle')settleItem(id);
+  if(b.dataset.act==='edit')openEdit(id);
+};
+const peopleClick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.act==='settle')settleItem(b.dataset.id);if(b.dataset.act==='edit')openEdit(b.dataset.id);};
+document.getElementById('debtorsList').onclick=peopleClick;
+document.getElementById('creditorsList').onclick=peopleClick;
+
+const curSel=document.getElementById('currency');
+['₹','$','€','£'].forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;if(c===currency)o.selected=true;curSel.appendChild(o);});
+curSel.onchange=()=>{currency=curSel.value;try{localStorage.setItem('cur',currency);}catch(e){}render();};
+
+async function init(){
+  document.getElementById('date').value=new Date().toISOString().slice(0,10);
+  buildForm();
+  try{
+    claudeDb=(typeof claude!=='undefined'&&claude.use)?await claude.use('db'):null;
+  }catch(e){claudeDb=null;}
+  if(claudeDb){
+    mode='db';
+    claudeDb.collection('ledger').onSnapshot(snap=>{
+      monthDocs={};
+      snap.docs.forEach(d=>{
+        const data=d.data();
+        if(d.id==='settings'){opening={cash:data.cash||0,bank:data.bank||0};}
+        else{monthDocs[d.id]=(data&&data.items)||[];}
+      });
+      render();
+    },err=>console.error('db error',err));
+  }else{
+    mode='local';
+    try{localItems=JSON.parse(localStorage.getItem('ledger_items')||'[]');}catch(e){localItems=[];}
+    try{opening=JSON.parse(localStorage.getItem('opening')||'{}');opening.cash=opening.cash||0;opening.bank=opening.bank||0;}catch(e){opening={cash:0,bank:0};}
+    render();
+  }
+}
+init();
+</script>
+</body>
+</html>
